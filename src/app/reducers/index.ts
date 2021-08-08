@@ -4,22 +4,21 @@ import { IXmindNode, XmindNode } from "../../model/node";
 import { actionSuccessAction } from "../actions/index";
 
 export interface IStore {
-  root: IXmindNode;
+  root: IXmindNode[];
 }
 
 interface IAction {
   type: string;
-  payload: any;
+  root: IXmindNode[];
 }
 
 const reducers = combineReducers({
-    root: createReducer(new XmindNode({
-      content: '根节点'
-    }))
-    .handleAction(actionSuccessAction, (root: IXmindNode) => {
-      console.log('reduce_root', root);;
-      return {...root};
-    })
+    root: createReducer([new XmindNode({
+      content: '根节点',
+      x: 0,
+      y: 0
+    })])
+    .handleAction(actionSuccessAction, (root: IXmindNode, action: IAction) => action.root)
 });
 
 export default reducers;

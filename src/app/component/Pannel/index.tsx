@@ -3,7 +3,7 @@ import Root from "./Root";
 import { IXmindNode } from "../../../model/node";
 
 interface IProps {
-  root: IXmindNode
+  root: IXmindNode[]
 }
 
 function Pannel(props: IProps) {

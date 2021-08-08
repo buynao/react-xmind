@@ -6,6 +6,8 @@ export interface IXmindNode {
   content?: string;
   id?: string;
   deep?: number;
+  x: number;
+  y: number;
 }
 
 export class XmindNode implements IXmindNode {
@@ -14,11 +16,15 @@ export class XmindNode implements IXmindNode {
   content;
   id;
   deep;
+  public x: number;
+  public y: number;
   constructor(props?: IXmindNode) {
     this.parent = props?.parent || null;
     this.children = [];
     this.content = props?.content || '子节点';
     this.id = props?.id || uuidv4();
     this.deep = props?.deep || 0;
+    this.x = props?.x || 0;
+    this.y = props?.y || 0;
   }
 }
