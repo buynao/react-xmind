@@ -5,7 +5,7 @@ export type IAddChildNodeInfo = {
   newNode: IXmindNode
 }
 
-export type IDeleteNodeInfo = {
+export type ICurNode = {
   curNode: IXmindNode
 }
 
@@ -18,7 +18,19 @@ export const addChildNodeAction = createCustomAction(ADD_CHILD,
 // 2. 删除子节点
 const DELETE_NODE = "XMIND/DELETE_NODE";
 export const deleteNodeAction = createCustomAction(DELETE_NODE,
-  (deleteNodeInfo: IDeleteNodeInfo) =>  deleteNodeInfo
+  (deleteNodeInfo: ICurNode) =>  deleteNodeInfo
+);
+
+// 2. 更新当前节点
+const UPDATE_NODE = "XMIND/UPDATE_NODE";
+export const updateNodeAction = createCustomAction(UPDATE_NODE,
+  (curNode: ICurNode) =>  curNode
+);
+
+// 3. 更新当前节点
+const UPDATE_NODES = "XMIND/UPDATE_NODES";
+export const updateNodesAction = createCustomAction(UPDATE_NODES,
+  (curNode: ICurNode) =>  curNode
 );
 
 // 3. 操作成功

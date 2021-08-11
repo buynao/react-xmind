@@ -1,15 +1,14 @@
 
 
 import { Epic } from "redux-observable";
-import { from, of } from "rxjs";
-import { filter, catchError, map } from "rxjs/operators";
+import { filter, map } from "rxjs/operators";
 
 import { isActionOf } from "typesafe-actions";
 import { RootState, ActionsType } from "../../store/index";
 import { IXmindNode } from "../../model/node";
 import * as controls from "../control";
-import { IDeleteNodeInfo, IAddChildNodeInfo,
-  actionSuccessAction, addChildNodeAction, deleteNodeAction } from "../actions";
+import { ICurNode, IAddChildNodeInfo,
+  actionSuccessAction, addChildNodeAction, deleteNodeAction, updateNodeAction, updateNodesAction } from "../actions";
 
 type RootEpic = Epic<
   ActionsType,
@@ -28,10 +27,20 @@ export const addChildNodeEpic: RootEpic = (action$, store, { addNode }) =>
 export const deleteNodeEpic: RootEpic = (action$, store, { deleteNode }) =>
   action$.pipe(
     filter(isActionOf(deleteNodeAction)),
-    map((nodeInfo: IDeleteNodeInfo) => deleteNode(nodeInfo, store.value)),
-    map((root: IXmindNode[]) => {
-      console.log('epic');
-      console.log(root);
-      return actionSuccessAction(root)
-    })
+    map((nodeInfo: ICurNode) => deleteNode(nodeInfo, store.value)),
+    map((root: IXmindNode[]) => actionSuccessAction(root))
+  )
+
+export const updateNodeEpic: RootEpic = (action$, store, { updateNode }) =>
+  action$.pipe(
+    filter(isActionOf(updateNodeAction)),
+    map((nodeInfo: ICurNode) => updateNode(nodeInfo, store.value)),
+    map((root: IXmindNode[]) => actionSuccessAction(root))
+  )
+
+export const updateNodesEpic: RootEpic = (action$, store, { updateNodes }) =>
+  action$.pipe(
+    filter(isActionOf(updateNodesAction)),
+    map((nodeInfo: ICurNode) => updateNodes(nodeInfo, store.value)),
+    map((root: IXmindNode[]) => actionSuccessAction(root))
   )
