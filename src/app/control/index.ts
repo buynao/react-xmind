@@ -65,7 +65,7 @@ export const deleteNode = function(nodeInfo: ICurNode, store: RootState) {
     return false;
   });
 
-  return [...newRoots, ...resetSameNodes];
+  return updateNodesControl([...newRoots, ...resetSameNodes]);
 }
 // 更新当前节点
 export const updateNode = function(nodeInfo: ICurNode, store: RootState) {
@@ -80,16 +80,14 @@ export const updateNode = function(nodeInfo: ICurNode, store: RootState) {
   return [...newRoots];
 }
 // 更新当前组节点
-export const updateNodes = function(nodeInfo: ICurNode, store: RootState) {
-  const { curNode } = nodeInfo;
-  const { root } = store;
+export const updateNodesControl = function(rootNode: IXmindNode[]) {
   // 1. 找出需要更新的组节点
-  const nodesMap = genNodeId2MapKey(root);
+  const nodesMap = genNodeId2MapKey(rootNode);
   // const newNodes = genNodesList(curNode.parent as IXmindNode, root);
   // 3. 批量更新组节点高度
-  genNodesHeight(root[0], nodesMap);
+  uodateNodesHeight(rootNode[0], nodesMap);
   // 4. 批量更新节点位移
-  updateNodeOffset(root[0], nodesMap);
+  updateNodesOffset(rootNode[0], nodesMap);
   const newNodeList = Object.values(nodesMap) as IXmindNode[];
   console.log(`newNodeList`);
   console.log(newNodeList);
@@ -106,51 +104,40 @@ function deleteNodeForRoots (root: IXmindNode[], curNode: IXmindNode) {
   });
 }
 
-function getNodeForParent(root: IXmindNode[], curNode: IXmindNode) {
-  return root.filter((item) => {
-    const isSame = isSameNodeParent(curNode, item);
-    if (curNode.id === item.id || isSame) {
-      return true;
-    }
-    return false;
-  });
-}
-
-function genNodesHeight (rootNode: IXmindNode, nodesMap: any) : number {
+// 更新所有节点的高度
+function uodateNodesHeight (rootNode: IXmindNode, nodesMap: any) : number {
   const nodes = rootNode.children as IXmindNode[];
   const len = nodes.length;
   if (len === 0)  {
     nodesMap[rootNode.id].minHeight = rootNode.minHeight;
-    return rootNode.minHeight as number;
+    return rootNode.minHeight;
   };
   let minHeight = 0;
   nodes.forEach((item) => {
-    minHeight = minHeight + genNodesHeight(item, nodesMap);
+    minHeight = minHeight + uodateNodesHeight(item, nodesMap);
   })
 
   nodesMap[rootNode.id].minHeight = minHeight;
   return minHeight;
 }
-
-function updateNodeOffset (rootNode: IXmindNode, nodesMap: any) {
+// 更新所以节点的偏移量
+function updateNodesOffset (rootNode: IXmindNode, nodesMap: any) {
   if (!rootNode) return; 
   const nodes = rootNode.children as IXmindNode[];
   const len = nodes.length;
   if (len === 0) return;
-  // 节点为1
-  // nodes[0].x = getOffsetLeft(nodes[0]);
-  // nodes[0].y = getOffsetTop(nodes[0]);
-
   for (let i = 0; i < len; i++) {
-    updateNodeOffset(nodes[i], nodesMap)
-    nodesMap[nodes[i].id].x = getOffsetLeft(nodes[i]);
+    const nodeId = nodes[i].id;
+    nodesMap[nodeId].x = getOffsetLeft(nodes[i]);
     if (i === 0) {
-      nodesMap[nodes[i].id].y = getOffsetTop(nodes[i]);
+      nodesMap[nodeId].y = getOffsetTop(nodes[i]);
     } else {
-      nodesMap[nodes[i].id].y = nodesMap[nodes[ i - 1].id].y + (nodesMap[nodes[ i - 1].id]?.minHeight as number);
+      // 上个节点的top + 上个节点的高度
+      const prevNodeId = nodes[ i - 1].id;
+      const offsetTop = nodesMap[prevNodeId].y + (nodesMap[prevNodeId]?.minHeight) - (nodesMap[prevNodeId].minHeight - 100) / 2;
+      nodesMap[nodeId].y = offsetTop + (nodesMap[nodeId].minHeight - 100) / 2;
     }
-    // nodes[i].x = getOffsetLeft(nodes[i]);
-    // nodes[i].y = nodes[i - 1].y + (nodes[i - 1]?.minHeight as number);
+    updateNodesOffset(nodes[i], nodesMap)
   }
 
   return;

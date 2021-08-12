@@ -1,7 +1,7 @@
 import * as React from "react"
 import { IXmindNode, XmindNode } from "../../../../model/node";
 import { updateNodesAction, updateNodeAction } from "../../../actions/index";
-import NodeChild  from "../Node";
+import NodeChildEvent  from "../Node";
 import "./index.less";
 import { useDispatch } from 'react-redux';
 import classNames from "classnames";
@@ -49,10 +49,10 @@ function Node({ node }: INodeProps) {
           left: node.x,
           top: node.y
         }}>
-          {node.content} childrens: {node.children?.length}
+          <p>{node.content} childrens: {node.children?.length}</p>
           <p>{`height：${node.minHeight}`}</p>
           <p>X:{node.x}  Y:{node.y} deep:{node.deep} index:{node.index}</p>
-          <NodeChild node={node} />
+          <NodeChildEvent node={node} />
       </div>
     </>
 }
@@ -64,9 +64,9 @@ function RootNode(root: IProps) {
   //   console.log("new nodes:");
   //   console.log(nodes[0]);
   // }, [nodes])
-  console.log('重新渲染后的 S：')
-  console.log(node)
-  console.log('重新渲染后的 E：')
+  // console.log('重新渲染后的 S：')
+  // console.log(node)
+  // console.log('重新渲染后的 E：')
   return <>
     {
       node.map((item) => <Node key={item.id} node={item} />)

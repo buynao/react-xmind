@@ -29,7 +29,8 @@ function NodeChild  ({
               id,
               x: curX,
               y: 0,
-              index: sameNodes.length
+              index: sameNodes.length,
+              minHeight: 0
             });
             dispatch(addChildNodeAction({
               newNode: child
@@ -51,6 +52,7 @@ function NodeChild  ({
               x: curX,
               y: curY,
               id,
+              minHeight: 0
             });
             dispatch(addChildNodeAction({
               newNode: child

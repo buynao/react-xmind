@@ -38,9 +38,9 @@ export const updateNodeEpic: RootEpic = (action$, store, { updateNode }) =>
     map((root: IXmindNode[]) => actionSuccessAction(root))
   )
 
-export const updateNodesEpic: RootEpic = (action$, store, { updateNodes }) =>
+export const updateNodesEpic: RootEpic = (action$, store, { updateNodesControl }) =>
   action$.pipe(
     filter(isActionOf(updateNodesAction)),
-    map((nodeInfo: ICurNode) => updateNodes(nodeInfo, store.value)),
+    map((nodeInfo: ICurNode) => updateNodesControl(store.value.root)),
     map((root: IXmindNode[]) => actionSuccessAction(root))
   )

@@ -12,7 +12,7 @@ export const getOffsetTop = (node: IXmindNode) => {
     return INIT_TOP;
   }
   // 多个子节点
-  const midY = ((node.parent.children as []).length * MIN_HEIGHT - MIN_HEIGHT)/ 2;
+  const midY = (node.parent.minHeight - node.minHeight) / 2;
   return node.parent.y - midY;
 }
 
