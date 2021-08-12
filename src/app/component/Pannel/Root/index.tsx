@@ -1,75 +1,77 @@
 import * as React from "react"
 import { IXmindNode, XmindNode } from "../../../../model/node";
-import { updateNodesAction, updateNodeAction } from "../../../actions/index";
-import NodeChildEvent  from "../Node";
+import { updateNodesAction, updateNodeAction, selectCurNodeAction } from "../../../actions/index";
+import { IStore } from "../../../reducers/index";
 import "./index.less";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import classNames from "classnames";
 import { getOffsetLeft, getOffsetTop } from "../../../util/help";
 
-const { useEffect, useRef } = React;
+const { useRef } = React;
 
-interface IProps {
-  node: IXmindNode[]
-}
 interface INodeProps {
   node: IXmindNode
+  curNode: IXmindNode
 }
 
-function Node({ node }: INodeProps) {
+function Node({ node, curNode }: INodeProps) {
   const dispatch = useDispatch();
   const clsName = classNames("node", {
+    "select": node.id === curNode?.id,
     "root-node": !node.parent,
   });
   const element = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const needUpate = {
-      curNode: {
-        ...node,
-        element: element.current,
-        x: getOffsetLeft(node, element.current),
-        y: getOffsetTop(node)
-      }
-    }
-    // 引用赋值
-    if (!node.parent) {
-      dispatch(updateNodeAction(needUpate))
-    } else {
-      dispatch(updateNodesAction(needUpate))
-    }
-    return () => {
-      console.log('释放element')
-      node.element = null;
-    }
-  }, []);
+  // useEffect(() => {
+  //   const needUpate = {
+  //     curNode: {
+  //       ...node,
+  //       element: element.current
+  //     }
+  //   }
+  //   // 引用赋值
+  //   if (!node.parent) {
+  //     dispatch(updateNodeAction(needUpate))
+  //   } else {
+  //     dispatch(updateNodesAction(needUpate))
+  //   }
+  //   return () => {
+  //     console.log('释放element')
+  //     node.element = null;
+  //   }
+  // }, []);
 
   return <>
-      <div className={clsName} ref={element} style={{
-          left: node.x,
-          top: node.y
-        }}>
+      <div
+        className={clsName}
+        ref={element}
+        onClick={() => {
+          dispatch(selectCurNodeAction({
+            ...node
+          }))
+        }}
+        style={{
+            left: node.x,
+            top: node.y
+          }}>
           <p>{node.content} childrens: {node.children?.length}</p>
           <p>{`height：${node.minHeight}`}</p>
           <p>X:{node.x}  Y:{node.y} deep:{node.deep} index:{node.index}</p>
-          <NodeChildEvent node={node} />
       </div>
     </>
 }
 
-function RootNode(root: IProps) {
-  const { node } = root;
+function RootNode() {
 
-  // useEffect(() => {
-  //   console.log("new nodes:");
-  //   console.log(nodes[0]);
-  // }, [nodes])
-  // console.log('重新渲染后的 S：')
-  // console.log(node)
-  // console.log('重新渲染后的 E：')
+  const { nodeList, curNode } = useSelector((store: IStore) => store);
+
   return <>
     {
-      node.map((item) => <Node key={item.id} node={item} />)
+      nodeList.map((item) => <Node
+        key={item.id}
+        node={item}
+        curNode={curNode}
+      />)
     }
   </>
 }

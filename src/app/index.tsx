@@ -7,12 +7,9 @@ import { useSelector } from 'react-redux';
 
 
 function XMind() {
-  const root = useSelector((store: IStore) => store.root);
   return <>
-    <Menu/>
-    <Pannel
-      root={root}
-    />
+    <Menu />
+    <Pannel />
   </>
 }
 

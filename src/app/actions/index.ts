@@ -18,7 +18,7 @@ export const addChildNodeAction = createCustomAction(ADD_CHILD,
 // 2. 删除子节点
 const DELETE_NODE = "XMIND/DELETE_NODE";
 export const deleteNodeAction = createCustomAction(DELETE_NODE,
-  (deleteNodeInfo: ICurNode) =>  deleteNodeInfo
+  (curNode: ICurNode) =>  curNode
 );
 
 // 2. 更新当前节点
@@ -36,8 +36,15 @@ export const updateNodesAction = createCustomAction(UPDATE_NODES,
 // 3. 操作成功
 const ACTION_SUCCESS = "XMIND/ACTION_SUCCESS";
 export const actionSuccessAction = createCustomAction(ACTION_SUCCESS,
-  (root: IXmindNode[], length?: number) =>  ({
-    root,
-    length
+  (nodeList: IXmindNode[], length?: number) =>  ({
+    nodeList
+  })
+);
+
+// 4. 操作成功
+const SELECT_CUR_NODE = "XMIND/SELECT_CUR_NODE";
+export const selectCurNodeAction = createCustomAction(SELECT_CUR_NODE,
+  (curNode: IXmindNode) =>  ({
+    curNode
   })
 );

@@ -12,16 +12,16 @@ interface INodeProps {
 }
 
 function NodeChild  ({
-  node, element
+  node
 }: INodeProps) {
-  const root = useSelector((store: IStore) => store.root);
+  const nodeList = useSelector((store: IStore) => store.nodeList);
   const dispatch = useDispatch();
   return <>
             <button onClick={() => {
             const curX = Number(node?.x) + 1;
             const deep = Number(node?.deep) + 1;
             const id = uuidv4().slice(0, 8);
-            const sameNodes = root.filter((item) => deep === item.deep && node === item.parent);
+            const sameNodes = nodeList.filter((item) => deep === item.deep && node === item.parent);
             const child = new XmindNode({
               parent: node,
               content: `子节点${id.slice(0, 8)}`,

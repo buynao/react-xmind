@@ -1,24 +1,31 @@
 import { createReducer } from "typesafe-actions";
 import { combineReducers } from 'redux';
 import { IXmindNode, XmindNode } from "../../model/node";
-import { actionSuccessAction } from "../actions/index";
+import { actionSuccessAction, selectCurNodeAction } from "../actions/index";
+import { v4 as uuidv4 } from 'uuid';
 
 export interface IStore {
-  root: IXmindNode[];
+  nodeList: IXmindNode[];
+  curNode: IXmindNode;
 }
 
 interface IAction {
   type: string;
-  root: IXmindNode[];
+  nodeList: IXmindNode[];
+  curNode: IXmindNode;
 }
 
 const reducers = combineReducers({
-    root: createReducer([new XmindNode({
+    nodeList: createReducer([new XmindNode({
       content: '根节点',
       x: 0,
-      y: 0
+      y: 300,
+      id: uuidv4().slice(0, 8),
+      minHeight: 0
     })])
-    .handleAction(actionSuccessAction, (root: IXmindNode, action: IAction) => action.root)
+    .handleAction(actionSuccessAction, (nodeList: IXmindNode, action: IAction) => action.nodeList),
+    curNode: createReducer(null)
+    .handleAction(selectCurNodeAction, (curNode: IXmindNode, action: IAction) => action.curNode)
 });
 
 export default reducers;
