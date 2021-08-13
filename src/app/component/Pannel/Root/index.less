@@ -2,24 +2,32 @@
   margin: 0;
   padding: 0;
 }
-.root-node {
-  position: absolute;
-  left: 50px;
-  top: 300px;
-  background-color: red;
-}
-
 .node {
-  width: 200px;
-  height: 100px;
+  min-width: 100px;
   border-radius: 3px;
   font-size: 12px;
-  margin: 10px;
+  padding: 10px;
   position: absolute;
-  border: 1px solid blue;
+  background-color: rgba(207, 205, 205, 0.548);
+  border: 2px solid #fff;
+  cursor: default;
 }
+.root-node {
+  min-height: 100px;
+  left: 50px;
+  top: 300px;
+  background-color: blue;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+}
+.second-node {
+  font-size: 14px;
+  font-weight: 700;
+}
+
 .select.node {
-  border-width: 2px;
+  border-color: rgb(93, 193, 240);
 }
 .node-wrap {
   border: 1px solid red;

@@ -1,9 +1,10 @@
 import { IAddChildNodeInfo, ICurNode } from "../actions/index";
 import { IXmindNode } from "../../model/node";
 import { RootState } from "../../store/index";
-import { getOffsetLeft, getOffsetTop } from "../util/help";
+import { getOffsetLeft, getFirstNodeTop } from "../util/help";
+import { MIN_HEIGHT, Y_GAP } from "../constants"
 
-interface INodeMap {
+export interface INodeMap {
   [key: string]: IXmindNode;
 }
 
@@ -29,7 +30,7 @@ export const addNode = function(nodeInfo: IAddChildNodeInfo, store: RootState) {
   const parentId = newNode.parent?.id as string;
   nodeMap[parentId].children?.push(newNode);
   addNodeForTree(nodeMap[parentId], nodeMap);
-  return updateNodesControl(Object.values(nodeMap), nodeMap);
+  return Object.values(nodeMap);
 }
 // 删除节点
 export const deleteNode = function(nodeInfo: ICurNode, store: RootState) {
@@ -69,22 +70,19 @@ export const deleteNode = function(nodeInfo: ICurNode, store: RootState) {
 export const updateNode = function(nodeInfo: ICurNode, store: RootState) {
   const { curNode } = nodeInfo;
   const { nodeList } = store;
-  const newRoots = nodeList.map((item) => {
-    if (item.id === curNode.id) {
-      return curNode
-    }
-    return item;
-  });
-  return [...newRoots];
+  const nodeMap = genNodeId2MapKey(nodeList);
+  updateNodeForTree(curNode, nodeMap);
+  return updateNodesControl(Object.values(nodeMap), nodeMap);
 }
 // 更新当前组节点
-export const updateNodesControl = function(rootNode: IXmindNode[], nodeMap?: INodeMap | null) {
+export const updateNodesControl = function(nodeList: IXmindNode[], nodeMap?: INodeMap) {
   // 节点组合映射成map         
-  const nodesMap = nodeMap || genNodeId2MapKey(rootNode);
+  const nodesMap = nodeMap || genNodeId2MapKey(nodeList);
+  const rootNode = getRootNode(nodeList[0]) as IXmindNode;
   // 批量更新组节点高度
-  updateNodesHeight(rootNode[0], nodesMap);
+  updateNodesHeight(nodesMap[rootNode.id], nodesMap);
   // 批量更新节点位移
-  updateNodesOffset(rootNode[0], nodesMap);
+  updateNodesOffset(nodesMap[rootNode.id], nodesMap);
   // 节点map生成新数组
   const newNodeList = Object.values(nodesMap);
   console.log('newNodeList');
@@ -94,6 +92,13 @@ export const updateNodesControl = function(rootNode: IXmindNode[], nodeMap?: INo
 
 
 /* ----------------------------工具库------------------------------- */
+// 更新节点引用关系
+function updateNodeForTree (curNode: IXmindNode, nodeMap: INodeMap) {
+  if (!curNode) return;
+  nodeMap[curNode.id] = curNode;
+  updateNodeForTree(nodeMap[curNode.id].parent as IXmindNode, nodeMap)
+}
+
 // 删除节点引用关系
 function deleteNodeForTree (deleteId: string, curNode: IXmindNode, nodeMap: INodeMap) {
   const parentNode = curNode.parent as IXmindNode;
@@ -135,37 +140,37 @@ function deleteNodeForNodeList (curNode: IXmindNode, nodeMap: INodeMap) {
   }
 }
 // 更新所有节点的高度
-function updateNodesHeight (rootNode: IXmindNode, nodesMap: any) : number {
+function updateNodesHeight (rootNode: IXmindNode, nodesMap: INodeMap) : number {
   const nodes = rootNode.children as IXmindNode[];
   const len = nodes.length;
   if (len === 0)  {
-    nodesMap[rootNode.id].minHeight = rootNode.minHeight;
-    return rootNode.minHeight;
+    nodesMap[rootNode.id].minHeight = nodesMap[rootNode.id].element?.offsetHeight || MIN_HEIGHT;
+    return nodesMap[rootNode.id].minHeight;
   };
   let minHeight = 0;
   nodes.forEach((item) => {
-    minHeight = minHeight + updateNodesHeight(item, nodesMap);
+    minHeight = minHeight + Y_GAP + updateNodesHeight(item, nodesMap);
   })
 
-  nodesMap[rootNode.id].minHeight = minHeight;
+  nodesMap[rootNode.id].minHeight = minHeight - Y_GAP;
   return minHeight;
 }
 // 更新所以节点的偏移量
-function updateNodesOffset (rootNode: IXmindNode, nodesMap: any) {
+function updateNodesOffset (rootNode: IXmindNode, nodesMap: INodeMap) {
   if (!rootNode) return; 
   const nodes = rootNode.children as IXmindNode[];
   const len = nodes.length;
   if (len === 0) return;
   for (let i = 0; i < len; i++) {
     const nodeId = nodes[i].id;
-    nodesMap[nodeId].x = getOffsetLeft(nodes[i], nodesMap);
+    nodesMap[nodeId].x = getOffsetLeft(nodes[i]);
     if (i === 0) {
-      nodesMap[nodeId].y = getOffsetTop(nodes[i], nodesMap);
+      nodesMap[nodeId].y = getFirstNodeTop(nodes[i], nodesMap);
     } else {
       // 上个节点的top + 上个节点的高度 - 上个节点的占用高度
       const prevNodeId = nodes[ i - 1].id;
-      const offsetTop = nodesMap[prevNodeId].y + nodesMap[prevNodeId].minHeight - (nodesMap[prevNodeId].minHeight - 100) / 2;
-      nodesMap[nodeId].y = offsetTop + (nodesMap[nodeId].minHeight - 100) / 2;
+      const offsetTop = nodesMap[prevNodeId].y + nodesMap[prevNodeId].minHeight - (nodesMap[prevNodeId].minHeight - nodesMap[prevNodeId]?.element?.offsetHeight) / 2;
+      nodesMap[nodeId].y = offsetTop + (nodesMap[nodeId].minHeight - nodesMap[nodeId].element?.offsetHeight) / 2 + Y_GAP;
     }
     updateNodesOffset(nodes[i], nodesMap)
   }
@@ -183,4 +188,8 @@ function genNodeId2MapKey(nodeList: IXmindNode[]) : INodeMap {
   return nodeMap;
 }
 
-// 批量更新
+// 获取根节点
+function getRootNode(node: IXmindNode) : IXmindNode{
+  if (!node.parent) return node;
+  return getRootNode(node.parent);
+}

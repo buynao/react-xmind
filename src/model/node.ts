@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import { MIN_HEIGHT } from "../app/util/help";
+import { MIN_HEIGHT } from "../app/constants";
 
 export interface IXmindNode {
   parent?: IXmindNode | null;
