@@ -1,20 +1,21 @@
 import * as React from "react"
 import { useDispatch, useSelector } from 'react-redux';
-import { IXmindNode, XmindNode } from "../../../model/node";
+import { XmindNode } from "../../../model/node";
+import { INode, INodes } from "XmindTypes"
 import { addChildNodeAction, deleteNodeAction } from "../../actions/index";
 import { v4 as uuidv4 } from 'uuid';
 import "./index.less";
 
 interface IProps {
-  curNode: IXmindNode
-  nodeList: IXmindNode[]
+  curNode: INode
+  nodeList: INodes
 }
 
 function Menu() {
   const dispatch = useDispatch();
   const { curNode, nodeList } = useSelector((store: IProps) => store);
   const deep = Number(curNode?.deep);
-  return <div>
+  return <div className="mind-map-menu">
     <p>当前节点:{curNode?.id}</p>
     <button
       onClick={() => {
@@ -27,8 +28,7 @@ function Menu() {
           id,
           x: 0,
           y: 0,
-          index: sameNodes.length,
-          minHeight: 0
+          index: sameNodes.length
         });
         dispatch(addChildNodeAction({
           newNode: child
@@ -49,8 +49,7 @@ function Menu() {
         x: 0,
         y: 0,
         id,
-        index: sameNodes.length,
-        minHeight: 0
+        index: sameNodes.length
       });
       dispatch(addChildNodeAction({
         newNode: child

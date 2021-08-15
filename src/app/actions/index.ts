@@ -1,12 +1,12 @@
 import { createAction, createCustomAction } from "typesafe-actions";
-import { IXmindNode } from "../../model/node";        
+import { INode, INodes } from "XmindTypes";        
 
 export type IAddChildNodeInfo = {
-  newNode: IXmindNode
+  newNode: INode
 }
 
 export type ICurNode = {
-  curNode: IXmindNode
+  curNode: INode
 }
 
 // 1. 添加子节点
@@ -35,8 +35,8 @@ export const updateNodesAction = createCustomAction(UPDATE_NODES,
 
 // 3. 操作成功
 const ACTION_SUCCESS = "XMIND/ACTION_SUCCESS";
-export const actionSuccessAction = createCustomAction(ACTION_SUCCESS,
-  (nodeList: IXmindNode[], length?: number) =>  ({
+export const actionSuccess = createCustomAction(ACTION_SUCCESS,
+  (nodeList: INodes) =>  ({
     nodeList
   })
 );
@@ -44,7 +44,7 @@ export const actionSuccessAction = createCustomAction(ACTION_SUCCESS,
 // 4. 操作成功
 const SELECT_CUR_NODE = "XMIND/SELECT_CUR_NODE";
 export const selectCurNodeAction = createCustomAction(SELECT_CUR_NODE,
-  (curNode: IXmindNode) =>  ({
+  (curNode: INode) =>  ({
     curNode
   })
 );

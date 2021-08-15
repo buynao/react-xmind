@@ -1,16 +1,14 @@
 import * as React from "react";
 import Menu from "./component/Menu";
 import Pannel from "./component/Pannel";
-import { useStore } from "react-redux";
-import { IStore } from "../store/root-reducers";
-import { useSelector } from 'react-redux';
-
+import "./global.less";
 
 function XMind() {
   return <>
-    <Menu />
+  <Menu />
+  <div className="mind-map">
     <Pannel />
-  </>
+  </div></>
 }
 
 export default XMind;

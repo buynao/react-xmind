@@ -2,6 +2,15 @@
   margin: 0;
   padding: 0;
 }
+.pannel-wrap {
+  position: relative;
+  height: 20000px;
+  width: 20000px;
+  margin: 18px;
+  transition: transform 0.1s ease 0s;
+  transform: scale(1);
+  transform-origin: left top;
+}
 .node {
   min-width: 100px;
   border-radius: 3px;
@@ -14,12 +23,11 @@
 }
 .root-node {
   min-height: 100px;
-  left: 50px;
-  top: 300px;
-  background-color: blue;
-  color: #fff;
-  font-size: 16px;
-  font-weight: 700;
+  color: #ffffff;
+  padding: 10px 15px;
+  background-color: #00aaff;
+  border-radius: 5px;
+  font-size: 25px;
 }
 .second-node {
   font-size: 14px;

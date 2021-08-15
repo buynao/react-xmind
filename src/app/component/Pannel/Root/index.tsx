@@ -1,22 +1,22 @@
 import * as React from "react"
-import { IXmindNode } from "../../../../model/node";
+import { INode, IStore } from "XmindTypes";
 import { updateNodeAction, selectCurNodeAction } from "../../../actions/index";
-import { IStore } from "../../../reducers/index";
 import "./index.less";
 import { useDispatch, useSelector } from 'react-redux';
 import classNames from "classnames";
+import { getRootNode } from "../../../control/index";
 
 const { useRef, useEffect } = React;
 
 interface INodeProps {
-  node: IXmindNode
-  curNode: IXmindNode
+  node: INode
+  selectNode: INode
 }
 
-function Node({ node, curNode }: INodeProps) {
+function Node({ node, selectNode }: INodeProps) {
   const dispatch = useDispatch();
   const clsName = classNames("node", {
-    "select": node.id === curNode?.id,
+    "select": node.id === selectNode?.id,
     "root-node": !node.parent,
     "second-node": node.deep === 1
   });
@@ -52,7 +52,7 @@ function Node({ node, curNode }: INodeProps) {
             top: node.y
           }}>
           {/* <p>{node.content} childrens: {node.children?.length}</p> */}
-          <p>{`height：${node.minHeight} top:${node.y}`}</p>
+          <p>{`children:${node.children?.length}`}</p>
       </div>
     </>
 }
@@ -60,16 +60,17 @@ function Node({ node, curNode }: INodeProps) {
 function RootNode() {
 
   const { nodeList, curNode } = useSelector((store: IStore) => store);
+  const rootNode = getRootNode(nodeList[0]);
 
-  return <>
+  return <div className="pannel-wrap">
     {
       nodeList.map((item) => <Node
         key={item.id}
         node={item}
-        curNode={curNode}
+        selectNode={curNode}
       />)
     }
-  </>
+  </div>
 }
 
 export default RootNode;

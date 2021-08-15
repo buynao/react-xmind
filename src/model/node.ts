@@ -1,20 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
-import { MIN_HEIGHT } from "../app/constants";
+import { INode } from 'XmindTypes';
 
-export interface IXmindNode {
-  parent?: IXmindNode | null;
-  children?: IXmindNode[];
-  content?: string;
-  id: string;
-  deep?: number;
-  index?: number;
-  x: number;
-  y: number;
-  element?: HTMLDivElement | null;
-  minHeight: number;
-}
-
-export class XmindNode implements IXmindNode {
+export class XmindNode implements INode {
   index;
   parent;
   children: [];
@@ -22,10 +9,10 @@ export class XmindNode implements IXmindNode {
   id;
   deep;
   element;
-  minHeight; // 当前节点的子节点最大高度
+  wrap;
   public x: number;
   public y: number;
-  constructor(props: IXmindNode) {
+  constructor(props: INode) {
     this.parent = props.parent || null;
     this.children = [];
     this.content = props.content || '子节点';
@@ -35,6 +22,9 @@ export class XmindNode implements IXmindNode {
     this.y = props.y || 0;
     this.index = props.index || 0;
     this.element = props.element || null;
-    this.minHeight = props.minHeight || MIN_HEIGHT;
+    this.wrap = props.wrap || {
+      width: 0,
+      height: 0
+    }
   }
 }
