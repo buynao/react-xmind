@@ -6,7 +6,7 @@ import { MIN_HEIGHT, MIN_WIDTH, X_GAP, Y_GAP } from "../constants"
 import { type } from "os";
 
 export interface INodeMap {
-  [key: string]: INode;
+  [key: string]: Required<INode>;
 }
 
 /**
@@ -96,7 +96,7 @@ export const updateNodesControl = function(nodeList: INodes, nodeMap?: INodeMap)
 // 更新节点引用关系
 function updateNodeForTree (curNode: INode, nodeMap: INodeMap) {
   if (!curNode) return;
-  nodeMap[curNode.id] = curNode;
+  nodeMap[curNode.id] = curNode as Required<INode>;
   updateNodeForTree(nodeMap[curNode.id].parent as INode, nodeMap)
 }
 
@@ -164,6 +164,7 @@ function updateNodesWrap (rootNode: INode, nodesMap: INodeMap) : IWrap {
   nodesMap[rootId].wrap = { height: minHeight, width: minWidth };
   return nodesMap[rootId].wrap as IWrap;
 }
+
 // 更新所以节点的偏移量
 function updateNodesOffset (rootNode: INode, nodesMap: INodeMap) {
   if (!rootNode) return; 
@@ -182,8 +183,8 @@ function updateNodesOffset (rootNode: INode, nodesMap: INodeMap) {
       // 上个节点的top + 上个节点的高度 - 上个节点的占用高度
       const prevNodeId = nodes[i - 1].id;
       const preWrap = nodesMap[prevNodeId].wrap as IWrap;
-      const offsetTop = nodesMap[prevNodeId].y + preWrap?.height - (preWrap?.height - nodesMap[prevNodeId].element?.offsetHeight) / 2;
-      nodesMap[nodeId].y = offsetTop + (nodesMap[nodeId].wrap?.height - nodesMap[nodeId].element?.offsetHeight) / 2 + Y_GAP;
+      const offsetTop = nodesMap[prevNodeId].y + preWrap.height - (preWrap.height - nodesMap[prevNodeId].element.offsetHeight) / 2;
+      nodesMap[nodeId].y = offsetTop + (nodesMap[nodeId].wrap.height - nodesMap[nodeId].element.offsetHeight) / 2 + Y_GAP;
     }
     updateNodesOffset(nodes[i], nodesMap)
   }
@@ -195,7 +196,7 @@ function genNodeId2MapKey(nodeList: INodes) : INodeMap {
   const nodeMap = {} as INodeMap;
   nodeList.forEach((item) => {
     const key = item.id as string;
-    nodeMap[key] = item;
+    nodeMap[key] = item as Required<INode>;
   });
   return nodeMap;
 }

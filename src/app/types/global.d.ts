@@ -14,7 +14,7 @@ declare module "XmindTypes" {
     index?: number;
     x: number;
     y: number;
-    element?: HTMLDivElement | null;
+    element?: HTMLDivElement;
     wrap?: IWrap;
   }
   
