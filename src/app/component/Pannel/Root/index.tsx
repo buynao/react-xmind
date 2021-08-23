@@ -26,7 +26,7 @@ function Node({ node, selectNode }: INodeProps) {
     const needUpate = {
       curNode: {
         ...node,
-        element: element.current
+        element: element.current as HTMLDivElement
       }
     }
 
@@ -34,7 +34,7 @@ function Node({ node, selectNode }: INodeProps) {
 
     return () => {
       console.log('释放element')
-      node.element = null;
+      node.element = undefined;
     }
   }, []);
 
@@ -42,17 +42,17 @@ function Node({ node, selectNode }: INodeProps) {
       <div
         className={clsName}
         ref={element}
+        style={{
+            left: node.x,
+            top: node.y
+          }}
         onClick={() => {
           dispatch(selectCurNodeAction({
             ...node
           }))
-        }}
-        style={{
-            left: node.x,
-            top: node.y
-          }}>
-          {/* <p>{node.content} childrens: {node.children?.length}</p> */}
-          <p>{`children:${node.children?.length}`}</p>
+        }}>
+          <p>{`height: ${node.wrap?.height}`}</p>
+          <p>{`ID:${node.id}`}</p>
       </div>
     </>
 }
