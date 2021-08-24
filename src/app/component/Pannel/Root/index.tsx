@@ -62,7 +62,7 @@ function RootNode() {
   const { nodeList, curNode } = useSelector((store: IStore) => store);
   const rootNode = getRootNode(nodeList[0]);
 
-  return <div className="pannel-wrap">
+  return <>
     {
       nodeList.map((item) => <Node
         key={item.id}
@@ -70,7 +70,7 @@ function RootNode() {
         selectNode={curNode}
       />)
     }
-  </div>
+  </>
 }
 
 export default RootNode;

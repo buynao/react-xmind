@@ -5,6 +5,16 @@ declare module "XmindTypes" {
     width: number;
     height: number;
   }
+  export type ConnectLine = {
+    from: {
+      x: number;
+      y: number;
+    },
+    to: {
+      x: number;
+      y: number;
+    };
+  }
   export interface INode {
     parent?: INode | null;
     children?: INode[];
@@ -16,6 +26,10 @@ declare module "XmindTypes" {
     y: number;
     element?: HTMLDivElement;
     wrap?: IWrap;
+    ele?: {
+      width: number;
+      height: number;
+    }
   }
   
   export type INodes = INode[];
@@ -23,5 +37,6 @@ declare module "XmindTypes" {
   export interface IStore {
     nodeList: INodes;
     curNode: INode;
+    nodesLine: ConnectLine[];
   }
 }
