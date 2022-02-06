@@ -6,7 +6,6 @@ import { INodeMap } from "../control/index";
 export const getFirstNodeTop = (node: INode, nodesMap: INodeMap) => {
   // 根节点
   if (!node.parent || !nodesMap) {
-    console.log(node);
     const nodeId = node.id;
     const rootNode = nodesMap[nodeId];
     const rootTop = (rootNode.wrap?.height as number - rootNode.element?.offsetHeight) / 2;

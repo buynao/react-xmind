@@ -15,12 +15,13 @@ interface INodeProps {
 
 function Node({ node, selectNode }: INodeProps) {
   const dispatch = useDispatch();
+
   const clsName = classNames("node", {
     "select": node.id === selectNode?.id,
     "root-node": !node.parent,
     "second-node": node.deep === 1
   });
-  const element = useRef<HTMLDivElement>(null);
+  const element = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const needUpate = {
@@ -33,19 +34,18 @@ function Node({ node, selectNode }: INodeProps) {
     dispatch(updateNodeAction(needUpate))
 
     return () => {
-      console.log('释放element')
-      node.element = undefined;
+      node.element = null;
     }
   }, []);
-
   return <>
       <div
         className={clsName}
         ref={element}
         style={{
-            left: node.x,
-            top: node.y
-          }}
+          opacity: node.x === 0 ? 0 : 1,
+          left: node.x,
+          top: node.y
+        }}
         onClick={() => {
           dispatch(selectCurNodeAction({
             ...node

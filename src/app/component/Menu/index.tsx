@@ -16,7 +16,7 @@ function Menu() {
   const { curNode, nodeList } = useSelector((store: IProps) => store);
   const deep = Number(curNode?.deep);
   return <div className="mind-map-menu">
-    <p>当前节点:{curNode?.id}</p>
+    <p>current node :{curNode?.id}</p>
     <button
       onClick={() => {
         const id = uuidv4().slice(0, 8);
@@ -34,7 +34,7 @@ function Menu() {
           newNode: child
         }))
       }}
-    >添加</button>
+    >add children</button>
     <button onClick={() => {
       if (!curNode.parent) {
         alert("根节点无法添加同级节点");
@@ -54,18 +54,14 @@ function Menu() {
       dispatch(addChildNodeAction({
         newNode: child
       }))
-    }}>同级节点</button>
+    }}>add siblings</button>
     <button onClick={() => {
       if (!curNode.parent) {
         alert("根节点无法删除")
         return;
       };
-      dispatch(deleteNodeAction(
-        {
-          curNode
-        }
-      ))
-    }}>删除</button>
+      dispatch(deleteNodeAction({ curNode }))
+    }}>delete</button>
   </div>
 }
 

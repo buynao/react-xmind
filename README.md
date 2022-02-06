@@ -1,1 +1,22 @@
-### 使用react + typescript + rxjs，构建xmind思维导图demo
+## react-xmind
+
+A simple of mindmap for understanding custom layout algorithms.
+
+## Example
+
+online demo: [https://react-xmind.vercel.app/](https://react-xmind.vercel.app/)
+
+![react-xmind](https://buynao.oss-cn-beijing.aliyuncs.com/1644150618541.jpg)
+
+## Usage
+
+```js
+
+git clone https://github.com/buynao/react-xmind.git
+
+cd react-xmind
+
+npm install & yarn
+npm run start & yarn start
+
+```
