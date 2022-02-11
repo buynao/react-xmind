@@ -4,7 +4,7 @@
   "description": "A simple of mindmap for understanding custom layout algorithms.",
   "main": "index.js",
   "scripts": {
-    "start": "rm -rf ./dist/ && parcel ./public/index.html",
+    "dev": "rm -rf ./dist/ && parcel ./public/index.html",
     "build": "rm -rf ./dist/ && parcel build --no-source-maps --no-cache ./public/index.html"
   },
   "keywords": [

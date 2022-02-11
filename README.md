@@ -17,6 +17,6 @@ git clone https://github.com/buynao/react-xmind.git
 cd react-xmind
 
 npm install & yarn
-npm run start & yarn start
+npm run dev & yarn dev
 
 ```
