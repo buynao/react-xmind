@@ -5,6 +5,7 @@ import "./index.less";
 import { useDispatch, useSelector } from 'react-redux';
 import classNames from "classnames";
 import { getRootNode } from "../../../control/index";
+import ConnectLine from "../ConnectLine";
 
 const { useRef, useEffect } = React;
 
@@ -15,13 +16,13 @@ interface INodeProps {
 
 function Node({ node, selectNode }: INodeProps) {
   const dispatch = useDispatch();
+  const element = useRef<HTMLDivElement | null>(null);
 
   const clsName = classNames("node", {
     "select": node.id === selectNode?.id,
     "root-node": !node.parent,
     "second-node": node.deep === 1
   });
-  const element = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const needUpate = {
@@ -37,6 +38,7 @@ function Node({ node, selectNode }: INodeProps) {
       node.element = null;
     }
   }, []);
+
   return <>
       <div
         className={clsName}
@@ -57,12 +59,12 @@ function Node({ node, selectNode }: INodeProps) {
     </>
 }
 
-function RootNode() {
+function RootNode({ MindWrapRef }: any) {
 
   const { nodeList, curNode } = useSelector((store: IStore) => store);
   const rootNode = getRootNode(nodeList[0]);
 
-  return <>
+  return <div ref={MindWrapRef} className="mind-map-nodes">
     {
       nodeList.map((item) => <Node
         key={item.id}
@@ -70,7 +72,7 @@ function RootNode() {
         selectNode={curNode}
       />)
     }
-  </>
+  </div>
 }
 
 export default RootNode;

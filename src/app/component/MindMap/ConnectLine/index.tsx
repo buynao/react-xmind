@@ -2,10 +2,10 @@ import * as React from "react";
 import { IStore } from "XmindTypes";
 import { useSelector } from 'react-redux';
 
-function ConnectLine () {
+function ConnectLine ({ MindConnectLineRef }: any) {
   const { nodesLine } = useSelector((store: IStore) => store);
 
-  return <svg width="100%" height="100%" version="1.1">
+  return <svg ref={MindConnectLineRef} className="ConnectLine-svg" width="100%" height="100%" version="1.1">
     {
       nodesLine.map((line, index) => {
         const start = line.from;

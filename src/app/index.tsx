@@ -1,14 +1,13 @@
 import * as React from "react";
 import Menu from "./component/Menu";
-import Pannel from "./component/Pannel";
+import MindMap from "./component/MindMap";
 import "./global.less";
 
 function XMind() {
   return <>
-  <Menu />
-  <div className="mind-map">
-    <Pannel />
-  </div></>
+    <Menu />
+    <MindMap />
+  </>
 }
 
 export default XMind;

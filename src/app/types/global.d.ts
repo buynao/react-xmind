@@ -40,3 +40,4 @@ declare module "XmindTypes" {
     nodesLine: ConnectLine[];
   }
 }
+declare module 'classnames';

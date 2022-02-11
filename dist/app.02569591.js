@@ -50524,7 +50524,59 @@ function Menu() {
 
 var _default = Menu;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","react-redux":"../node_modules/react-redux/es/index.js","../../../model/node":"../src/model/node.ts","../../actions/index":"../src/app/actions/index.ts","uuid":"../node_modules/uuid/index.js","./index.less":"../src/app/component/Menu/index.less"}],"../src/app/component/Pannel/Root/index.less":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-redux":"../node_modules/react-redux/es/index.js","../../../model/node":"../src/model/node.ts","../../actions/index":"../src/app/actions/index.ts","uuid":"../node_modules/uuid/index.js","./index.less":"../src/app/component/Menu/index.less"}],"../src/app/component/MindMap/ConnectLine/index.tsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var React = _interopRequireWildcard(require("react"));
+
+var _reactRedux = require("react-redux");
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function ConnectLine(_ref) {
+  var MindConnectLineRef = _ref.MindConnectLineRef;
+
+  var _useSelector = (0, _reactRedux.useSelector)(function (store) {
+    return store;
+  }),
+      nodesLine = _useSelector.nodesLine;
+
+  return React.createElement("svg", {
+    ref: MindConnectLineRef,
+    className: "ConnectLine-svg",
+    width: "100%",
+    height: "100%",
+    version: "1.1"
+  }, nodesLine.map(function (line, index) {
+    var start = line.from;
+    var to = line.to; // const direction = start.x - to.x > 0 ? 'left' : 'right';
+
+    var Q = {
+      x: start.x + (to.x - start.x) / 2 - 10,
+      y: to.y
+    };
+    return React.createElement("path", {
+      key: index,
+      d: "M".concat(start.x, " ").concat(start.y, " Q").concat(Q.x, " ").concat(Q.y, " ").concat(to.x, " ").concat(to.y),
+      fill: "none",
+      stroke: "#000000",
+      style: {
+        strokeWidth: '2px'
+      }
+    });
+  }));
+}
+
+var _default = ConnectLine;
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","react-redux":"../node_modules/react-redux/es/index.js"}],"../src/app/component/MindMap/Root/index.less":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -50584,7 +50636,7 @@ var define;
 	}
 }());
 
-},{}],"../src/app/component/Pannel/Root/index.tsx":[function(require,module,exports) {
+},{}],"../src/app/component/MindMap/Root/index.tsx":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -50620,12 +50672,12 @@ function Node(_ref) {
   var _a;
 
   var dispatch = (0, _reactRedux.useDispatch)();
+  var element = useRef(null);
   var clsName = (0, _classnames.default)("node", {
     "select": node.id === (selectNode === null || selectNode === void 0 ? void 0 : selectNode.id),
     "root-node": !node.parent,
     "second-node": node.deep === 1
   });
-  var element = useRef(null);
   useEffect(function () {
     var needUpate = {
       curNode: Object.assign(Object.assign({}, node), {
@@ -50651,7 +50703,9 @@ function Node(_ref) {
   }, React.createElement("p", null, "height: ".concat((_a = node.wrap) === null || _a === void 0 ? void 0 : _a.height)), React.createElement("p", null, "ID:".concat(node.id))));
 }
 
-function RootNode() {
+function RootNode(_ref2) {
+  var MindWrapRef = _ref2.MindWrapRef;
+
   var _useSelector = (0, _reactRedux.useSelector)(function (store) {
     return store;
   }),
@@ -50659,7 +50713,10 @@ function RootNode() {
       curNode = _useSelector.curNode;
 
   var rootNode = (0, _index3.getRootNode)(nodeList[0]);
-  return React.createElement(React.Fragment, null, nodeList.map(function (item) {
+  return React.createElement("div", {
+    ref: MindWrapRef,
+    className: "mind-map-nodes"
+  }, nodeList.map(function (item) {
     return React.createElement(Node, {
       key: item.id,
       node: item,
@@ -50670,74 +50727,26 @@ function RootNode() {
 
 var _default = RootNode;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","../../../actions/index":"../src/app/actions/index.ts","./index.less":"../src/app/component/Pannel/Root/index.less","react-redux":"../node_modules/react-redux/es/index.js","classnames":"../node_modules/classnames/index.js","../../../control/index":"../src/app/control/index.ts"}],"../src/app/component/Pannel/index.less":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","../../../actions/index":"../src/app/actions/index.ts","./index.less":"../src/app/component/MindMap/Root/index.less","react-redux":"../node_modules/react-redux/es/index.js","classnames":"../node_modules/classnames/index.js","../../../control/index":"../src/app/control/index.ts"}],"../src/app/component/MindMap/index.less":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../src/app/component/ConnectLine/index.tsx":[function(require,module,exports) {
+},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../src/app/component/MindMap/index.tsx":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
+exports.default = exports.getTouchPosition = exports.getEvent = exports.isPC = void 0;
 
 var React = _interopRequireWildcard(require("react"));
 
-var _reactRedux = require("react-redux");
-
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-function ConnectLine() {
-  var _useSelector = (0, _reactRedux.useSelector)(function (store) {
-    return store;
-  }),
-      nodesLine = _useSelector.nodesLine;
-
-  return React.createElement("svg", {
-    width: "100%",
-    height: "100%",
-    version: "1.1"
-  }, nodesLine.map(function (line, index) {
-    var start = line.from;
-    var to = line.to; // const direction = start.x - to.x > 0 ? 'left' : 'right';
-
-    var Q = {
-      x: start.x + (to.x - start.x) / 2 - 10,
-      y: to.y
-    };
-    return React.createElement("path", {
-      key: index,
-      d: "M".concat(start.x, " ").concat(start.y, " Q").concat(Q.x, " ").concat(Q.y, " ").concat(to.x, " ").concat(to.y),
-      fill: "none",
-      stroke: "#000000",
-      style: {
-        strokeWidth: '2px'
-      }
-    });
-  }));
-}
-
-var _default = ConnectLine;
-exports.default = _default;
-},{"react":"../node_modules/react/index.js","react-redux":"../node_modules/react-redux/es/index.js"}],"../src/app/component/Pannel/index.tsx":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var React = _interopRequireWildcard(require("react"));
+var _ConnectLine = _interopRequireDefault(require("./ConnectLine"));
 
 var _Root = _interopRequireDefault(require("./Root"));
 
 require("./index.less");
-
-var _ConnectLine = _interopRequireDefault(require("../ConnectLine"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -50745,15 +50754,110 @@ function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "functio
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
-function Pannel() {
+var isPC = function isPC() {
+  var userAgentInfo = navigator.userAgent;
+  var Agents = ["Android", "iPhone", "SymbianOS", "Windows Phone", "iPad", "iPod"];
+  var flag = true;
+
+  for (var v = 0; v < Agents.length; v++) {
+    if (userAgentInfo.indexOf(Agents[v]) > 0) {
+      flag = false;
+      break;
+    }
+  }
+
+  return flag;
+};
+
+exports.isPC = isPC;
+
+var getEvent = function getEvent(e) {
+  return isPC() ? e : e.targetTouches[0];
+};
+
+exports.getEvent = getEvent;
+
+var getTouchPosition = function getTouchPosition(e) {
+  var event = getEvent(e);
+  var x = event.pageX;
+  var y = event.pageY;
+  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
+  console.log("\u521D\u59CB\u4F4D\u79FBx:".concat(x, "\uFF0Cy:").concat(y));
+  console.log('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<');
+  return {
+    x: x,
+    y: y
+  };
+};
+
+exports.getTouchPosition = getTouchPosition;
+var useState = React.useState,
+    useRef = React.useRef;
+
+function MindMap() {
+  var isMoveRef = useRef(false);
+  var MovePos = useRef({
+    x: 0,
+    y: 0
+  });
+  var MindMapPos = useRef({
+    x: 0,
+    y: 0
+  });
+  var MindWrapRef = useRef(null);
+  var MindConnectLineRef = useRef(null);
+
+  var moveDown = function moveDown(e) {
+    MovePos.current = getTouchPosition(e);
+    isMoveRef.current = true;
+  };
+
+  var move = function move(e) {
+    if (isMoveRef.current) {
+      var newPos = getTouchPosition(e);
+      var diff = {
+        x: newPos.x - MovePos.current.x + MindMapPos.current.x,
+        y: newPos.y - MovePos.current.y + MindMapPos.current.y
+      };
+
+      if (MindWrapRef.current && MindConnectLineRef.current) {
+        MindWrapRef.current.style.transform = "translate(".concat(diff.x, "px, ").concat(diff.y, "px)");
+        MindConnectLineRef.current.style.transform = "translate(".concat(diff.x, "px, ").concat(diff.y, "px)");
+      }
+    }
+  };
+
+  var moveUp = function moveUp(e) {
+    var newPos = getTouchPosition(e);
+    var diff = {
+      x: newPos.x - MovePos.current.x + MindMapPos.current.x,
+      y: newPos.y - MovePos.current.y + MindMapPos.current.y
+    };
+    isMoveRef.current = false;
+    MindMapPos.current = diff;
+  };
+
   return React.createElement("div", {
-    className: "pannel"
-  }, React.createElement(_Root.default, null), React.createElement(_ConnectLine.default, null));
+    onMouseDown: function onMouseDown(e) {
+      return moveDown(e);
+    },
+    onMouseMove: function onMouseMove(e) {
+      return move(e);
+    },
+    onMouseUp: function onMouseUp(e) {
+      return moveUp(e);
+    },
+    className: "mind-map-wrap"
+  }, React.createElement(_ConnectLine.default, {
+    MindConnectLineRef: MindConnectLineRef
+  }), React.createElement(_Root.default, {
+    MindWrapRef: MindWrapRef
+  }));
 }
 
-var _default = Pannel;
+var _default = MindMap;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","./Root":"../src/app/component/Pannel/Root/index.tsx","./index.less":"../src/app/component/Pannel/index.less","../ConnectLine":"../src/app/component/ConnectLine/index.tsx"}],"../src/app/global.less":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","./ConnectLine":"../src/app/component/MindMap/ConnectLine/index.tsx","./Root":"../src/app/component/MindMap/Root/index.tsx","./index.less":"../src/app/component/MindMap/index.less"}],"../src/app/global.less":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -50770,7 +50874,7 @@ var React = _interopRequireWildcard(require("react"));
 
 var _Menu = _interopRequireDefault(require("./component/Menu"));
 
-var _Pannel = _interopRequireDefault(require("./component/Pannel"));
+var _MindMap = _interopRequireDefault(require("./component/MindMap"));
 
 require("./global.less");
 
@@ -50781,14 +50885,12 @@ function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "functio
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function XMind() {
-  return React.createElement(React.Fragment, null, React.createElement(_Menu.default, null), React.createElement("div", {
-    className: "mind-map"
-  }, React.createElement(_Pannel.default, null)));
+  return React.createElement(React.Fragment, null, React.createElement(_Menu.default, null), React.createElement(_MindMap.default, null));
 }
 
 var _default = XMind;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","./component/Menu":"../src/app/component/Menu/index.tsx","./component/Pannel":"../src/app/component/Pannel/index.tsx","./global.less":"../src/app/global.less"}],"../src/app.tsx":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","./component/Menu":"../src/app/component/Menu/index.tsx","./component/MindMap":"../src/app/component/MindMap/index.tsx","./global.less":"../src/app/global.less"}],"../src/app.tsx":[function(require,module,exports) {
 "use strict";
 
 var React = _interopRequireWildcard(require("react"));
