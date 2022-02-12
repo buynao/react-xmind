@@ -8,7 +8,7 @@ online demo: [https://react-xmind.vercel.app/](https://react-xmind.vercel.app/)
 
 ![react-xmind](https://buynao.oss-cn-beijing.aliyuncs.com/1644150618541.jpg)
 
-## Usage
+## Run
 
 ```js
 
