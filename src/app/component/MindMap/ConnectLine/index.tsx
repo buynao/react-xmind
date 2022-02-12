@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 
 function ConnectLine ({ MindConnectLineRef }: any) {
   const { nodesLine } = useSelector((store: IStore) => store);
-
+  console.log(nodesLine);
   return <svg ref={MindConnectLineRef} className="ConnectLine-svg" width="100%" height="100%" version="1.1">
     {
       nodesLine.map((line, index) => {
@@ -15,6 +15,7 @@ function ConnectLine ({ MindConnectLineRef }: any) {
           x: start.x + (to.x - start.x) / 2 - 10,
           y: to.y
         };
+        console.log(`M${start.x} ${start.y} Q${Q.x} ${Q.y} ${to.x} ${to.y}`)
         return <path
           key={index}
           d={`M${start.x} ${start.y} Q${Q.x} ${Q.y} ${to.x} ${to.y}`}

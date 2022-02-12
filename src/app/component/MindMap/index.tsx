@@ -23,9 +23,6 @@ export const getTouchPosition = (e: any) => {
   const event = getEvent(e);
   const x = event.pageX;
   const y = event.pageY;
-  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
-  console.log(`初始位移x:${x}，y:${y}`)
-  console.log('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
   return {
     x,
     y
@@ -44,6 +41,7 @@ function MindMap() {
 
 
   const moveDown = (e: MoveEvent) => {
+    console.log(moveDown)
     MovePos.current = getTouchPosition(e);
     isMoveRef.current = true;
   }
@@ -56,8 +54,8 @@ function MindMap() {
           y: newPos.y - MovePos.current.y + MindMapPos.current.y
       };
       if (MindWrapRef.current && MindConnectLineRef.current) {
-          MindWrapRef.current.style.transform = `translate(${diff.x}px, ${diff.y}px)`;
-          MindConnectLineRef.current.style.transform = `translate(${diff.x}px, ${diff.y}px)`;
+        MindWrapRef.current.style.transform = `translate(${diff.x}px, ${diff.y}px)`;
+        MindConnectLineRef.current.style.transform = `translate(${diff.x}px, ${diff.y}px)`;
       }
     }
   }
@@ -77,7 +75,7 @@ function MindMap() {
           onMouseUp={(e) => moveUp(e)}
           className="mind-map-wrap"
       >
-      <ConnectLine MindConnectLineRef={MindConnectLineRef}/>
+      <ConnectLine  MindConnectLineRef={MindConnectLineRef} />
       <Root  MindWrapRef={MindWrapRef} />
   </div>
 }

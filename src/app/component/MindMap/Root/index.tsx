@@ -38,7 +38,7 @@ function Node({ node, selectNode }: INodeProps) {
       node.element = null;
     }
   }, []);
-
+console.log(node);
   return <>
       <div
         className={clsName}
@@ -53,8 +53,9 @@ function Node({ node, selectNode }: INodeProps) {
             ...node
           }))
         }}>
-          <p>{`height: ${node.wrap?.height}`}</p>
-          <p>{`ID:${node.id}`}</p>
+          {/* <p>{`x: ${node.x}`}</p>
+          <p>{`y: ${node.y}`}</p> */}
+          <p>{`${node.content}`}</p>
       </div>
     </>
 }
@@ -62,8 +63,7 @@ function Node({ node, selectNode }: INodeProps) {
 function RootNode({ MindWrapRef }: any) {
 
   const { nodeList, curNode } = useSelector((store: IStore) => store);
-  const rootNode = getRootNode(nodeList[0]);
-
+  
   return <div ref={MindWrapRef} className="mind-map-nodes">
     {
       nodeList.map((item) => <Node
@@ -72,6 +72,7 @@ function RootNode({ MindWrapRef }: any) {
         selectNode={curNode}
       />)
     }
+    {/* <ConnectLine /> */}
   </div>
 }
 

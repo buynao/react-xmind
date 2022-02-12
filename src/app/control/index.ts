@@ -158,8 +158,8 @@ function updateNodesWrap (rootNode: INode, nodesMap: INodeMap) : IWrap {
   let minHeight = 0;
   const rootId = rootNode.id;
   if (len === 0)  {
-    minHeight = nodesMap[rootId].element?.offsetHeight;
-    minWidth = nodesMap[rootId].element?.offsetWidth;
+    minHeight = nodesMap[rootId].element?.offsetHeight as number;
+    minWidth = nodesMap[rootId].element?.offsetWidth as number;
     nodesMap[rootId].ele = { height: minHeight, width: minWidth };
     nodesMap[rootId].wrap = { height: minHeight || MIN_HEIGHT, width: minWidth || MIN_WIDTH };
     return nodesMap[rootId].wrap;
@@ -179,25 +179,26 @@ function updateNodesWrap (rootNode: INode, nodesMap: INodeMap) : IWrap {
 // 更新所以节点的偏移量
 function updateNodesOffset (rootNode: INode, nodesMap: INodeMap) {
   if (!rootNode) return; 
-  const nodes = rootNode.children as INodes;
-  const len = nodes.length;
+  const childrens = rootNode.children as INodes;
+  const len = childrens.length;
+  
   if (!rootNode.parent) {
     nodesMap[rootNode.id].y = getFirstNodeTop(rootNode, nodesMap);
   }
   if (len === 0) return;
   for (let i = 0; i < len; i++) {
-    const nodeId = nodes[i].id;
-    nodesMap[nodeId].x = getOffsetLeft(nodes[i], nodesMap);
+    const nodeId = childrens[i].id;
+    nodesMap[nodeId].x = getOffsetLeft(childrens[i], nodesMap);
     if (i === 0) {
-      nodesMap[nodeId].y = getFirstNodeTop(nodes[i], nodesMap);
+      nodesMap[nodeId].y = getFirstNodeTop(childrens[i], nodesMap);
     } else {
       // 上个节点的top + 上个节点的高度 - 上个节点的占用高度
-      const prevNodeId = nodes[i - 1].id;
+      const prevNodeId = childrens[i - 1].id;
       const preWrap = nodesMap[prevNodeId].wrap;
-      const offsetTop = nodesMap[prevNodeId].y + preWrap.height - (preWrap.height - nodesMap[prevNodeId].element.offsetHeight) / 2;
-      nodesMap[nodeId].y = offsetTop + (nodesMap[nodeId].wrap.height - nodesMap[nodeId].element.offsetHeight) / 2 + Y_GAP;
+      const offsetTop = nodesMap[prevNodeId].y + preWrap.height - (preWrap.height - (nodesMap[prevNodeId].element?.offsetHeight as number)) / 2;
+      nodesMap[nodeId].y = offsetTop + (nodesMap[nodeId].wrap.height - (nodesMap[nodeId].element?.offsetHeight as number)) / 2 + Y_GAP;
     }
-    updateNodesOffset(nodes[i], nodesMap)
+    updateNodesOffset(childrens[i], nodesMap)
   }
   return;
 }
@@ -217,7 +218,11 @@ export function getRootNode(node: INode) : INode{
   if (!node.parent) return node;
   return getRootNode(node.parent);
 }
-
+/**
+ * 更新连接线
+ * 
+ *
+ */
 function updateNodesLine (root: INode, nodeMap: INodeMap, lines: ConnectLine[]): ConnectLine[] {
   if(root.children && !root.children.length) {
     return lines;
@@ -236,13 +241,16 @@ function updateNodesLine (root: INode, nodeMap: INodeMap, lines: ConnectLine[]):
       }
     }
     const nodeId = item.id;
-    const node = nodeMap[nodeId];
+    const childrenNode = nodeMap[nodeId];
+    console.log(childrenNode.y)
+    console.log(childrenNode.ele.height / 2)
+    console.log(childrenNode.y + childrenNode.ele.height / 2)
     bezireMap.to = {
-      x: node.x,
-      y: node.y + node.ele.height / 2
+      x: childrenNode.x,
+      y: childrenNode.y + childrenNode.ele.height / 2
     }
     lines.push(bezireMap);
-    lines.concat(updateNodesLine(node, nodeMap, lines));
+    lines.concat(updateNodesLine(childrenNode, nodeMap, lines));
   });
   return lines;
 }
