@@ -1,10 +1,10 @@
 ## react-xmind
 
-A simple of mindmap for understanding custom layout algorithms.
+一个简单的用于理解自定义布局算法的思维导图。
 
 ## Example
 
-online demo: [https://react-xmind.vercel.app/](https://react-xmind.vercel.app/)
+在线 demo : [https://react-xmind.vercel.app/](https://react-xmind.vercel.app/)
 
 ![react-xmind](https://buynao.oss-cn-beijing.aliyuncs.com/1644150618541.jpg)
 
