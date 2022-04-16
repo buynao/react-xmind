@@ -2,7 +2,7 @@ import { createReducer } from "typesafe-actions";
 import { combineReducers } from 'redux';
 import { XmindNode } from "../../model/node";
 import { INode, INodes, ConnectLine, IStore } from "XmindTypes";
-import { actionSuccess, selectCurNodeAction, setLayoutModeAction } from "../actions/index";
+import { actionSuccess, selectCurNodeAction, updateLayoutSuccessAction } from "../actions/index";
 import { v4 as uuidv4 } from 'uuid';
 import { INIT_LEFT, INIT_TOP } from '../constants';
 
@@ -31,7 +31,7 @@ const reducers = combineReducers<IStore>({
     .handleAction(actionSuccess, (nodesLine: ConnectLine[], action: IAction) => action.nodesLine),
 
     layoutMode: createReducer('right')
-    .handleAction(setLayoutModeAction, (layoutMode: string, action: IAction) => action.layoutMode),
+    .handleAction(actionSuccess, (layoutMode: string, action: IAction) => action.layoutMode || layoutMode),
 });
 
 export default reducers;

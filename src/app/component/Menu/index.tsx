@@ -2,7 +2,7 @@ import * as React from "react"
 import { useDispatch, useSelector } from 'react-redux';
 import { XmindNode } from "../../../model/node";
 import { INode, INodes } from "XmindTypes"
-import { addChildNodeAction, deleteNodeAction, setLayoutModeAction } from "../../actions/index";
+import { addChildNodeAction, deleteNodeAction, updateLayoutAction } from "../../actions/index";
 import { v4 as uuidv4 } from 'uuid';
 import "./index.less";
 
@@ -68,12 +68,12 @@ function Menu() {
     <button 
       disabled={layoutMode === 'right'}
     onClick={() => {
-      dispatch(setLayoutModeAction('right'))
+      dispatch(updateLayoutAction('right'))
     }}>layout: right</button>
     <button
       disabled={layoutMode === 'left'}
       onClick={() => {
-      dispatch(setLayoutModeAction('left'))
+      dispatch(updateLayoutAction('left'))
     }}>layout: left</button>
   </div>
 }

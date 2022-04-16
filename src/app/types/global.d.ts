@@ -10,6 +10,10 @@ declare module "XmindTypes" {
       x: number;
       y: number;
     },
+    q: {
+      x: number;
+      y: number;
+    },
     to: {
       x: number;
       y: number;
@@ -34,11 +38,11 @@ declare module "XmindTypes" {
   }
   
   export type INodes = INode[];
-  
+  export type Direction = 'left' | 'right' | 'mid';
   export interface IStore {
     nodeList: INodes;
     curNode: INode;
-    layoutMode: 'left' | 'right' | 'mid';
+    layoutMode: Direction;
     nodesLine: ConnectLine[];
   }
 }

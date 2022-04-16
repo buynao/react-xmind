@@ -1,5 +1,5 @@
 import { createCustomAction } from "typesafe-actions";
-import { INode, INodes, ConnectLine } from "XmindTypes";        
+import { INode, INodes, ConnectLine, Direction } from "XmindTypes";        
 
 export type IAddChildNodeInfo = {
   newNode: INode
@@ -36,9 +36,10 @@ export const updateNodesAction = createCustomAction(UPDATE_NODES,
 // 5. 操作成功
 const ACTION_SUCCESS = "XMIND/ACTION_SUCCESS";
 export const actionSuccess = createCustomAction(ACTION_SUCCESS,
-  (nodeList: INodes, nodesLine: ConnectLine[]) => ({
+  (nodeList: INodes, nodesLine: ConnectLine[], layoutMode?: Direction) => ({
     nodeList,
-    nodesLine
+    nodesLine,
+    layoutMode
   })
 );
 
@@ -62,8 +63,12 @@ export const ConnectLineSuccessAction = createCustomAction(BUILD_BEZIRE_LINE_SUC
 
 // 8. 设置布局模式
 const SET_LAYOUT_MODE = "XMIND/SET_LAYOUT_MODE";
-export const setLayoutModeAction = createCustomAction(SET_LAYOUT_MODE,
-  (layoutMode: string) => ({
+const SET_LAYOUT_MODE_SUCCESS = "XMIND/SET_LAYOUT_MODE_SUCCESS";
+export const updateLayoutAction = createCustomAction(SET_LAYOUT_MODE,
+  (layoutMode: Direction) => ({layoutMode})
+);
+export const updateLayoutSuccessAction = createCustomAction(SET_LAYOUT_MODE_SUCCESS,
+  (layoutMode: Direction) => ({
     layoutMode
   })
 );

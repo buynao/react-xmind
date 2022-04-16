@@ -1,5 +1,5 @@
 import { IAddChildNodeInfo, ICurNode } from "../actions/index";
-import { ConnectLine, INode, INodes, IWrap } from "XmindTypes";
+import { ConnectLine, Direction, INode, INodes, IWrap } from "XmindTypes";
 import { RootState } from "../../store/index";
 import { getOffsetLeft, getFirstNodeTop, getOffsetRight } from "../util/help";
 import { MIN_HEIGHT, MIN_WIDTH, X_GAP, Y_GAP } from "../constants"
@@ -69,15 +69,19 @@ export const deleteNode = function(nodeInfo: ICurNode, store: RootState) {
   return updateNodesControl([...newRoots, ...resetSameNodes], null, layoutMode);
 }
 // 更新当前节点
-export const updateNode = function(nodeInfo: ICurNode, store: RootState) {
+export const updateNode = function(nodeInfo: ICurNode, store: RootState, layoutMode?: Direction) {
   const { curNode } = nodeInfo;
-  const { nodeList, layoutMode } = store;
+  const { nodeList } = store;
   const nodeMap = genNodeId2MapKey(nodeList);
   updateNodeForTree(curNode, nodeMap);
-  return updateNodesControl(Object.values(nodeMap), nodeMap, layoutMode);
+  return updateNodesControl(Object.values(nodeMap), nodeMap, layoutMode || store.layoutMode);
 }
 // 更新当前组节点
-export const updateNodesControl = function(nodeList: INodes, nodeMap: INodeMap | null, layoutMode: string) {
+export const updateNodesControl = function(nodeList: INodes, nodeMap: INodeMap | null, layoutMode: Direction): {
+  nodeList: Required<INode>[];
+  nodesLine: ConnectLine[];
+  layoutMode: Direction;
+} {
   // 节点组合映射成map         
   const nodesMap = nodeMap || genNodeId2MapKey(nodeList);
   const rootNode = getRootNode(nodeList[0]);
@@ -91,13 +95,13 @@ export const updateNodesControl = function(nodeList: INodes, nodeMap: INodeMap |
   const nodesLine = updateNodesLine(nodesMap[rootNode.id], nodesMap, [], layoutMode);
   return {
     nodeList: [...newNodeList],
-    nodesLine
+    nodesLine,
+    layoutMode
   };
 }
 
-export const updateNodesConnectLine = function(nodeList: INodes) {
-  console.log(`updateNodesConnectLine:${nodeList}`);
-  return ['updateNodesConnectLine'];
+export const updateLayout = function(nodeList: INodes) {
+  return ['updateLayout'];
 }
 
 
@@ -172,7 +176,8 @@ function updateNodesWrap (rootNode: INode, nodesMap: INodeMap) : IWrap {
     minWidth = minWidth + X_GAP + width;
   })
   minHeight = minHeight - Y_GAP;
-  nodesMap[rootId].wrap = { height: minHeight, width: minWidth };
+  const wrapHeight = nodesMap[rootId].deep === 1 ? Math.max(minHeight, (nodesMap[rootId].element?.offsetHeight as number)) : minHeight;
+  nodesMap[rootId].wrap = { height: wrapHeight, width: minWidth };
   return nodesMap[rootId].wrap;
 }
 
@@ -189,14 +194,27 @@ function updateNodesOffset (rootNode: INode, nodesMap: INodeMap, layoutMode: str
   if (len === 0) return;
 
   for (let i = 0; i < len; i++) {
-    const nodeId = childrens[i].id;
+    const childrNode = childrens[i];
+    const nodeId = childrNode.id;
+    console.log('-------------------before-------------------')
+    console.log(`layoutMode:${layoutMode}`)
+    console.log(`nodeId:${nodeId}`);
+    console.log(`nodesMap[nodeId].x:${nodesMap[nodeId].x}`);
+    console.log('-------------------before-------------------')
     if (layoutMode === 'left') {
-      nodesMap[nodeId].x = getOffsetRight(childrens[i], nodesMap);
+      nodesMap[nodeId].x = getOffsetRight(childrNode, nodesMap);
+      // nodesMap[nodeId].x = !nodesMap[nodeId].isRoot ? nodesMap[nodeId].x - (nodesMap[nodeId].ele?.width as number || 0) : nodesMap[nodeId].x
     } else {
-      nodesMap[nodeId].x = getOffsetLeft(childrens[i], nodesMap);
+      nodesMap[nodeId].x = getOffsetLeft(childrNode, nodesMap);
     }
+    console.log('-------------------after-------------------')
+    console.log(`layoutMode:${layoutMode}`)
+    console.log(`nodeId:${nodeId}`);
+    console.log(`nodesMap[nodeId].x:${nodesMap[nodeId].x}`);
+    console.log('-------------------after-------------------')
+
     if (i === 0) {
-      nodesMap[nodeId].y = getFirstNodeTop(childrens[i], nodesMap);
+      nodesMap[nodeId].y = getFirstNodeTop(childrNode, nodesMap);
     } else {
       // 上个节点的top + 上个节点的高度 - 上个节点的占用高度
       const prevNodeId = childrens[i - 1].id;
@@ -204,7 +222,7 @@ function updateNodesOffset (rootNode: INode, nodesMap: INodeMap, layoutMode: str
       const offsetTop = nodesMap[prevNodeId].y + preWrap.height - (preWrap.height - (nodesMap[prevNodeId].element?.offsetHeight as number)) / 2;
       nodesMap[nodeId].y = offsetTop + (nodesMap[nodeId].wrap.height - (nodesMap[nodeId].element?.offsetHeight as number)) / 2 + Y_GAP;
     }
-    updateNodesOffset(childrens[i], nodesMap, layoutMode)
+    updateNodesOffset(childrNode, nodesMap, layoutMode)
   }
 
   return;
@@ -237,21 +255,31 @@ function updateNodesLine (root: INode, nodeMap: INodeMap, lines: ConnectLine[], 
   rootNode.children.forEach(item => {
     const bezireMap: ConnectLine = {
       from: {
-        x: rootNode.x + rootNode.ele.width,
+        x: layoutMode === 'left' ? rootNode.x : rootNode.x + rootNode.ele.width,
         y: rootNode.y + rootNode.ele.height / 2
+      },
+      q: {
+        x: 0,
+        y: 0
       },
       to: {
         x: 0,
         y: 0
       }
-    }
+    };
+    // const direction = start.x - to.x > 0 ? 'left' : 'right';
     const nodeId = item.id;
     const childrenNode = nodeMap[nodeId];
-    console.log(childrenNode.x)
+    const childEle = childrenNode.ele || {};
     bezireMap.to = {
-      x: childrenNode.x,
-      y: childrenNode.y + childrenNode.ele.height / 2
+      x:  layoutMode === 'left' ? childrenNode.x + childrenNode.ele.width : childrenNode.x,
+      y: childrenNode.y + (childEle.height || 0) / 2
     }
+    bezireMap.q = {
+      x: bezireMap.from.x + (bezireMap.to.x - bezireMap.from.x) / 2 - 10,
+      y: bezireMap.to.y
+    }
+    console.log(bezireMap);
     lines.push(bezireMap);
     lines.concat(updateNodesLine(childrenNode, nodeMap, lines, layoutMode));
   });

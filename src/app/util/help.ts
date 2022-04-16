@@ -13,10 +13,10 @@ export const getFirstNodeTop = (node: INode, nodesMap: INodeMap) => {
   // const midY = (nodesMap[parentId].minHeight - nodesMap[nodeId].minHeight) / 2;
   const parentOffsetHeight = nodesMap[parentId].element?.offsetHeight || MIN_HEIGHT;
   const parentMinHeight = nodesMap[parentId].wrap?.height || 0;
-  // 当前wrap的top
+  // 当前 wrap 的 top
   const midY = parentOffsetHeight > parentMinHeight ? (parentOffsetHeight - parentMinHeight) / 2 : (parentMinHeight - parentOffsetHeight) / 2;
   const wrapTop = parentOffsetHeight > parentMinHeight ? nodesMap[parentId].y + midY : nodesMap[parentId].y - midY;
-  // 当前element的top
+  // 当前 element 的 top
   const nodeId = node.id;
   const nodeOffsetHeight = nodesMap[nodeId].element?.offsetHeight || MIN_HEIGHT;
   const nodeMinHeight = nodesMap[nodeId].wrap?.height;
@@ -45,18 +45,16 @@ function getRightWidth (node: INode, nodesMap: INodeMap): number {
   if (!node) return 0;
   if (!node.parent) return 0;
   const parentId = node.parent.id;
-  const parentElement = nodesMap[parentId].element;
-  if (!parentElement) return 0;
-  const left = parseInt(parentElement.style.left);
-  const width = parentElement.offsetWidth;
-  const offsetLeft = parentElement.offsetLeft === left ? parentElement.offsetLeft + width : parentElement.offsetLeft;
-
-  return offsetLeft + width + X_GAP;
+  const parentNode = nodesMap[parentId];
+  const parentElement = parentNode.element as HTMLElement;
+  return parentNode.x - parentElement.offsetWidth - X_GAP;
 }
 
 function getLeftWidth (node: INode, nodesMap: INodeMap): number {
   if (!node) return 0;
   if (!node.parent) return 0;
   const parentId = node.parent.id;
-  return (nodesMap[parentId].element?.offsetLeft as number) + (nodesMap[parentId].element?.offsetWidth as number) + X_GAP;
+  const parentNode = nodesMap[parentId];
+  const parentElement = parentNode.element as HTMLElement;
+  return parentNode.x + parentElement.offsetWidth + X_GAP;
 }

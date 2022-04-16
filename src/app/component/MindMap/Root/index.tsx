@@ -37,19 +37,12 @@ function Node({ node, selectNode, layoutMode }: INodeProps) {
       node.element = null;
     }
   }, []);
-  console.log(node);
+
   const style = {
     opacity: node.x === 0 ? 0 : 1,
-    top: node.y
-  } as any;
-
-  if (layoutMode === 'left' && !node.isRoot) {
-    style.right = node.x;
-  }
-  if (layoutMode === 'right' || node.isRoot) {
-    style.left = node.x;
-  }
-
+    top: node.y,
+    left: node.x
+  };
   return <>
       <div
         className={clsName}
@@ -60,8 +53,8 @@ function Node({ node, selectNode, layoutMode }: INodeProps) {
             ...node
           }))
         }}>
-          {/* <p>{`x: ${node.x}`}</p>
-          <p>{`y: ${node.y}`}</p> */}
+          <p>{`x: ${node.x}`}</p>
+          <p>{`y: ${node.y}`}</p>
           <p>{`${node.content}`}</p>
       </div>
     </>
