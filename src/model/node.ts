@@ -9,6 +9,7 @@ export class XmindNode implements INode {
   deep;
   element;
   wrap;
+  isRoot;
   public x: number;
   public y: number;
   constructor(props: INode) {
@@ -21,6 +22,7 @@ export class XmindNode implements INode {
     this.y = props.y || 0;
     this.index = props.index || 0;
     this.element = props.element;
+    this.isRoot = props.isRoot || false;
     this.wrap = props.wrap || {
       width: 0,
       height: 0

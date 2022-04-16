@@ -15,7 +15,7 @@ function ConnectLine ({ MindConnectLineRef }: any) {
           x: start.x + (to.x - start.x) / 2 - 10,
           y: to.y
         };
-        console.log(`M${start.x} ${start.y} Q${Q.x} ${Q.y} ${to.x} ${to.y}`)
+
         return <path
           key={index}
           d={`M${start.x} ${start.y} Q${Q.x} ${Q.y} ${to.x} ${to.y}`}

@@ -4,17 +4,16 @@ import { updateNodeAction, selectCurNodeAction } from "../../../actions/index";
 import "./index.less";
 import { useDispatch, useSelector } from 'react-redux';
 import classNames from "classnames";
-import { getRootNode } from "../../../control/index";
-import ConnectLine from "../ConnectLine";
 
 const { useRef, useEffect } = React;
 
 interface INodeProps {
   node: INode
   selectNode: INode
+  layoutMode: string;
 }
 
-function Node({ node, selectNode }: INodeProps) {
+function Node({ node, selectNode, layoutMode }: INodeProps) {
   const dispatch = useDispatch();
   const element = useRef<HTMLDivElement | null>(null);
 
@@ -38,16 +37,24 @@ function Node({ node, selectNode }: INodeProps) {
       node.element = null;
     }
   }, []);
-console.log(node);
+  console.log(node);
+  const style = {
+    opacity: node.x === 0 ? 0 : 1,
+    top: node.y
+  } as any;
+
+  if (layoutMode === 'left' && !node.isRoot) {
+    style.right = node.x;
+  }
+  if (layoutMode === 'right' || node.isRoot) {
+    style.left = node.x;
+  }
+
   return <>
       <div
         className={clsName}
         ref={element}
-        style={{
-          opacity: node.x === 0 ? 0 : 1,
-          left: node.x,
-          top: node.y
-        }}
+        style={style}
         onClick={() => {
           dispatch(selectCurNodeAction({
             ...node
@@ -62,7 +69,7 @@ console.log(node);
 
 function RootNode({ MindWrapRef }: any) {
 
-  const { nodeList, curNode } = useSelector((store: IStore) => store);
+  const { nodeList, curNode, layoutMode } = useSelector((store: IStore) => store);
   
   return <div ref={MindWrapRef} className="mind-map-nodes">
     {
@@ -70,6 +77,7 @@ function RootNode({ MindWrapRef }: any) {
         key={item.id}
         node={item}
         selectNode={curNode}
+        layoutMode={layoutMode}
       />)
     }
     {/* <ConnectLine /> */}

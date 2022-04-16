@@ -28,7 +28,7 @@ export const getTouchPosition = (e: any) => {
     y
   }
 }
-const { useState, useRef } = React;
+const { useRef } = React;
 
 type MoveEvent =  React.MouseEvent<HTMLDivElement, MouseEvent>;
 
@@ -41,7 +41,6 @@ function MindMap() {
 
 
   const moveDown = (e: MoveEvent) => {
-    console.log(moveDown)
     MovePos.current = getTouchPosition(e);
     isMoveRef.current = true;
   }
@@ -59,6 +58,7 @@ function MindMap() {
       }
     }
   }
+
   const moveUp = (e: MoveEvent) => {
     const newPos = getTouchPosition(e);
     const diff = {

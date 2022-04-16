@@ -45,6 +45,6 @@ export const updateNodeEpic: RootEpic = (action$, store, { updateNode }) =>
 export const updateNodesEpic: RootEpic = (action$, store, { updateNodesControl }) =>
   action$.pipe(
     filter(isActionOf(updateNodesAction)),
-    map((nodeInfo: ICurNode) => updateNodesControl(store.value.nodeList)),
+    map((nodeInfo: ICurNode) => updateNodesControl(store.value.nodeList, null, store.value.layoutMode)),
     map((result: ActionResult) => actionSuccess(result.nodeList, result.nodesLine))
   )

@@ -33,6 +33,27 @@ export const getOffsetLeft = (node: INode, nodesMap: INodeMap, ele?: HTMLDivElem
   return offsetLeft;
 }
 
+export const getOffsetRight = (node: INode, nodesMap: INodeMap, ele?: HTMLDivElement | null) => {
+  if (!node.deep) {
+    return ele?.offsetLeft || 0;
+  }
+  const offsetRight = getRightWidth(node, nodesMap);
+  return offsetRight;
+}
+
+function getRightWidth (node: INode, nodesMap: INodeMap): number {
+  if (!node) return 0;
+  if (!node.parent) return 0;
+  const parentId = node.parent.id;
+  const parentElement = nodesMap[parentId].element;
+  if (!parentElement) return 0;
+  const left = parseInt(parentElement.style.left);
+  const width = parentElement.offsetWidth;
+  const offsetLeft = parentElement.offsetLeft === left ? parentElement.offsetLeft + width : parentElement.offsetLeft;
+
+  return offsetLeft + width + X_GAP;
+}
+
 function getLeftWidth (node: INode, nodesMap: INodeMap): number {
   if (!node) return 0;
   if (!node.parent) return 0;

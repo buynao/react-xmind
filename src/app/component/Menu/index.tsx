@@ -2,19 +2,22 @@ import * as React from "react"
 import { useDispatch, useSelector } from 'react-redux';
 import { XmindNode } from "../../../model/node";
 import { INode, INodes } from "XmindTypes"
-import { addChildNodeAction, deleteNodeAction } from "../../actions/index";
+import { addChildNodeAction, deleteNodeAction, setLayoutModeAction } from "../../actions/index";
 import { v4 as uuidv4 } from 'uuid';
 import "./index.less";
 
 interface IProps {
   curNode: INode
   nodeList: INodes
+  layoutMode: string;
 }
 
 function Menu() {
   const dispatch = useDispatch();
-  const { curNode, nodeList } = useSelector((store: IProps) => store);
+  const { curNode, nodeList, layoutMode } = useSelector((store: IProps) => store);
   const deep = Number(curNode?.deep);
+  console.log(`layoutMode:${layoutMode}`);
+
   return <div className="mind-map-menu">
     <p>current node :{curNode?.id}</p>
     <button
@@ -61,7 +64,17 @@ function Menu() {
         return;
       };
       dispatch(deleteNodeAction({ curNode }))
-    }}>delete</button>
+    }}>delete node</button>
+    <button 
+      disabled={layoutMode === 'right'}
+    onClick={() => {
+      dispatch(setLayoutModeAction('right'))
+    }}>layout: right</button>
+    <button
+      disabled={layoutMode === 'left'}
+      onClick={() => {
+      dispatch(setLayoutModeAction('left'))
+    }}>layout: left</button>
   </div>
 }
 

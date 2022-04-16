@@ -1,4 +1,3 @@
-import reducers, { IStore } from "../app/reducers";
+import reducers from "../app/reducers";
 
-export {IStore};
 export default reducers;

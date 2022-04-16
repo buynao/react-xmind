@@ -7,7 +7,9 @@ import * as dependencies from "../app/control/index";
 
 import rootEpic from "./root-epics";
 import * as actions from  "./root-actions";
-import reducers, { IStore } from "./root-reducers";
+import reducers from "./root-reducers";
+import { IStore } from "XmindTypes";
+
 export type RootState = IStore;
 export type ActionsType = ActionType<typeof actions>;
 
@@ -34,7 +36,7 @@ function configureStore(initialState?: RootState) {
   // compose enhancers
   const enhancer = composeEnhancers(applyMiddleware(...middlewares));
   // create store
-  return createStore(reducers, initialState, enhancer);
+  return createStore(reducers, enhancer);
 }
 
 const store = configureStore();

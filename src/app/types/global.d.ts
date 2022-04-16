@@ -26,6 +26,7 @@ declare module "XmindTypes" {
     y: number;
     element?: HTMLDivElement | null;
     wrap?: IWrap;
+    isRoot?: boolean;
     ele?: {
       width: number;
       height: number;
@@ -37,6 +38,7 @@ declare module "XmindTypes" {
   export interface IStore {
     nodeList: INodes;
     curNode: INode;
+    layoutMode: 'left' | 'right' | 'mid';
     nodesLine: ConnectLine[];
   }
 }
