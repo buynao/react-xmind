@@ -6,7 +6,7 @@
 
 在线 demo : [https://react-xmind.vercel.app/](https://react-xmind.vercel.app/)
 
-![react-xmind](https://buynao.oss-cn-beijing.aliyuncs.com/1644150618541.jpg)
+![react-xmind](./demo.png)
 
 ## Run
 

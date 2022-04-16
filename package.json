@@ -30,6 +30,7 @@
   "dependencies": {
     "classnames": "2.2.6",
     "less": "^3.11.3",
+    "parcel": "^2.4.1",
     "parcel-bundler": "^1.12.5",
     "parcel-plugin-bundle-visualiser": "^1.2.0",
     "react": "17.0.2",
