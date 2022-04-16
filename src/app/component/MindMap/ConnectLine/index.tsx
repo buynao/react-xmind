@@ -3,8 +3,8 @@ import { IStore } from "XmindTypes";
 import { useSelector } from 'react-redux';
 
 function ConnectLine ({ MindConnectLineRef }: any) {
-  const { nodesLine, layoutMode } = useSelector((store: IStore) => store);
-  console.log(nodesLine);
+  const { nodesLine } = useSelector((store: IStore) => store);
+
   return <svg ref={MindConnectLineRef} className="ConnectLine-svg" width="100%" height="100%" version="1.1">
     {
       nodesLine.map((line, index) => {

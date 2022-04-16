@@ -21,8 +21,10 @@ export const getFirstNodeTop = (node: INode, nodesMap: INodeMap) => {
   const nodeOffsetHeight = nodesMap[nodeId].element?.offsetHeight || MIN_HEIGHT;
   const nodeMinHeight = nodesMap[nodeId].wrap?.height;
   const nodY = nodeOffsetHeight > nodeMinHeight ? (nodeOffsetHeight - nodeMinHeight) / 2 : (nodeMinHeight - nodeOffsetHeight) / 2;
+  // fix deep === 2
+  const diffY = nodesMap[nodeId].deep === 2 && parentOffsetHeight > nodeMinHeight ? (parentOffsetHeight - nodeMinHeight) / 2 : 0
 
-  return wrapTop + nodY;
+  return wrapTop + nodY + diffY;
 }
 
 export const getOffsetLeft = (node: INode, nodesMap: INodeMap, ele?: HTMLDivElement | null) => {
@@ -47,7 +49,8 @@ function getRightWidth (node: INode, nodesMap: INodeMap): number {
   const parentId = node.parent.id;
   const parentNode = nodesMap[parentId];
   const parentElement = parentNode.element as HTMLElement;
-  return parentNode.x - parentElement.offsetWidth - X_GAP;
+  const offsetLeft = parentNode.x - parentElement.offsetWidth - X_GAP;
+  return parentNode.isRoot ? offsetLeft - 20 : offsetLeft;
 }
 
 function getLeftWidth (node: INode, nodesMap: INodeMap): number {

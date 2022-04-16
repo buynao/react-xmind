@@ -16,7 +16,6 @@ function Menu() {
   const dispatch = useDispatch();
   const { curNode, nodeList, layoutMode } = useSelector((store: IProps) => store);
   const deep = Number(curNode?.deep);
-  console.log(`layoutMode:${layoutMode}`);
 
   return <div className="mind-map-menu">
     <p>current node :{curNode?.id}</p>

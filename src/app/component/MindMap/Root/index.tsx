@@ -53,8 +53,8 @@ function Node({ node, selectNode, layoutMode }: INodeProps) {
             ...node
           }))
         }}>
-          <p>{`x: ${node.x}`}</p>
-          <p>{`y: ${node.y}`}</p>
+          {/* <p>{`x: ${node.x}`}</p>
+          <p>{`y: ${node.y}`}</p> */}
           <p>{`${node.content}`}</p>
       </div>
     </>

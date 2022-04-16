@@ -170,11 +170,13 @@ function updateNodesWrap (rootNode: INode, nodesMap: INodeMap) : IWrap {
   };
 
   minWidth = nodesMap[rootId].element?.offsetWidth || MIN_WIDTH;
+  
   childrens.forEach((item) => {
     const { width, height } = updateNodesWrap(item, nodesMap);
     minHeight = minHeight + Y_GAP + height;
     minWidth = minWidth + X_GAP + width;
-  })
+  });
+
   minHeight = minHeight - Y_GAP;
   const wrapHeight = nodesMap[rootId].deep === 1 ? Math.max(minHeight, (nodesMap[rootId].element?.offsetHeight as number)) : minHeight;
   nodesMap[rootId].wrap = { height: wrapHeight, width: minWidth };
@@ -196,22 +198,12 @@ function updateNodesOffset (rootNode: INode, nodesMap: INodeMap, layoutMode: str
   for (let i = 0; i < len; i++) {
     const childrNode = childrens[i];
     const nodeId = childrNode.id;
-    console.log('-------------------before-------------------')
-    console.log(`layoutMode:${layoutMode}`)
-    console.log(`nodeId:${nodeId}`);
-    console.log(`nodesMap[nodeId].x:${nodesMap[nodeId].x}`);
-    console.log('-------------------before-------------------')
+
     if (layoutMode === 'left') {
       nodesMap[nodeId].x = getOffsetRight(childrNode, nodesMap);
-      // nodesMap[nodeId].x = !nodesMap[nodeId].isRoot ? nodesMap[nodeId].x - (nodesMap[nodeId].ele?.width as number || 0) : nodesMap[nodeId].x
     } else {
       nodesMap[nodeId].x = getOffsetLeft(childrNode, nodesMap);
     }
-    console.log('-------------------after-------------------')
-    console.log(`layoutMode:${layoutMode}`)
-    console.log(`nodeId:${nodeId}`);
-    console.log(`nodesMap[nodeId].x:${nodesMap[nodeId].x}`);
-    console.log('-------------------after-------------------')
 
     if (i === 0) {
       nodesMap[nodeId].y = getFirstNodeTop(childrNode, nodesMap);
@@ -279,7 +271,6 @@ function updateNodesLine (root: INode, nodeMap: INodeMap, lines: ConnectLine[], 
       x: bezireMap.from.x + (bezireMap.to.x - bezireMap.from.x) / 2 - 10,
       y: bezireMap.to.y
     }
-    console.log(bezireMap);
     lines.push(bezireMap);
     lines.concat(updateNodesLine(childrenNode, nodeMap, lines, layoutMode));
   });
