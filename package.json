@@ -4,12 +4,14 @@
   "description": "A simple of mindmap for understanding custom layout algorithms.",
   "main": "index.js",
   "scripts": {
-    "dev": "rm -rf ./dist/ && parcel ./public/index.html",
-    "build": "rm -rf ./dist/ && parcel build --no-source-maps --no-cache ./public/index.html"
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
   },
   "keywords": [
-    "Parcel",
-    "Tsx"
+    "xmind",
+    "mind-map",
+    "react"
   ],
   "author": "liufulong",
   "license": "MIT",
@@ -25,14 +27,13 @@
     "@types/react-router-dom": "^5.1.7",
     "@types/redux": "^3.6.0",
     "@types/uuid": "^8.3.0",
-    "typescript": "3.9.7"
+    "typescript": "3.9.7",
+    "vite": "^2.7.2",
+    "@vitejs/plugin-react": "^1.0.7"
   },
   "dependencies": {
     "classnames": "2.2.6",
     "less": "^3.11.3",
-    "parcel": "^2.4.1",
-    "parcel-bundler": "^1.12.5",
-    "parcel-plugin-bundle-visualiser": "^1.2.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-redux": "7.2.4",
@@ -40,6 +41,7 @@
     "react-router-dom": "5.2.0",
     "redux-observable": "1.2.0",
     "rxjs": "6.6.3",
-    "typesafe-actions": "5.1.0"
+    "typesafe-actions": "5.1.0",
+    "uuid": "^8.3.2"
   }
 }
